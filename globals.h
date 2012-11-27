@@ -1,8 +1,10 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
+#include <avr/io.h>
 
 #ifndef F_CPU
-#define F_CPU 3696400
+#define F_CPU 4000000UL
+//#define F_CPU 3696400
 #endif
 
 #define MORSEPORT PORTA

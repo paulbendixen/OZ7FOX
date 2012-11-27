@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include "globals.h"
+#include "timer.h"
 
 int main(void)
 {
@@ -13,6 +14,9 @@ int main(void)
 	 * counter/timer register setup
 	 */
 
+	timerInit(0x1FFF);
+	sei();
+	
 	/* Main loop */
 	while (1)
 	{
