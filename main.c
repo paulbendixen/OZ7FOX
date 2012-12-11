@@ -4,6 +4,7 @@
 
 int main(void)
 {
+	int t;
 	/*
 	 * do init stuff
 	 */
@@ -20,6 +21,8 @@ int main(void)
 	/* Main loop */
 	while (1)
 	{
+		for (t = 0;t<0xFFFF;++t);
+		MORSEPORT ^= 0x04;
 		/* Procedure:
 		 * 1. check what fox we are
 		 * 2. wait for our time to send

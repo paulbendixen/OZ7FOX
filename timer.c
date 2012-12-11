@@ -2,10 +2,9 @@
 
 void timerInit(int timerCompare)
 {
-	TCCR1A = WGM12;
-	TCCR1B = CS12|CS10;
+	TCCR1B = (1<<WGM12)|(1<<CS12)|(1<<CS10);
 	setTimer(timerCompare);
-	TIMSK |= OCIE1A;
+	TIMSK |= (1<<OCIE1A);
 }
 
 void setTimer(int timerCompare)
