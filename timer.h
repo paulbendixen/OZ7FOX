@@ -5,6 +5,7 @@
 
 void timerInit(int timerCompare);
 void setTimer(int timerCompare);
+void resetTimer( void );
 
 //void ISR(TIMER1_COMPA_vect);
 #endif //TIMER_H

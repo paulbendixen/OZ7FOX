@@ -1,6 +1,8 @@
 #include <avr/io.h>
+#include <avr/sleep.h>
 #include "globals.h"
 #include "timer.h"
+#include "key.h"
 
 int main(void)
 {
@@ -15,14 +17,13 @@ int main(void)
 	 * counter/timer register setup
 	 */
 
-	timerInit(0x1FFF);
+	timerInit(0x400);
+
 	sei();
 	
 	/* Main loop */
 	while (1)
 	{
-		for (t = 0;t<0xFFFF;++t);
-		MORSEPORT ^= 0x04;
 		/* Procedure:
 		 * 1. check what fox we are
 		 * 2. wait for our time to send
@@ -33,5 +34,13 @@ int main(void)
 		 * 4. setup sleep time for wakeing up
 		 * 5. loop sleep untill we are supposed to wake up
 		 */
+		sendChar(28);//S
+		sendChar(24);//O
+		sendChar(28);//S
+		charSpace();
+		sendChar(28);//S
+		sendChar(24);//O
+		sendChar(28);//S
+		space();
 	}
 }
