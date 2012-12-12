@@ -3,7 +3,7 @@
 void timerInit(int timerCompare)
 {
 	// this should also at some point include setup for sleep on timer2
-	TCCR1B = (1<<WGM12)|(1<<CS12)|(1<<CS10);
+	TCCR1B = (1<<WGM12)|(1<<CS10);// (1<<CS12) makes it 1024
 	setTimer(timerCompare);
 	TIMSK |= (1<<OCIE1A);
 }

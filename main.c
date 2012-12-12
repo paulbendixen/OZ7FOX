@@ -7,17 +7,22 @@
 int main(void)
 {
 	int t;
+	uint8_t foxNo;
+	uint8_t foxes;
+	uint8_t fox;
 	/*
 	 * do init stuff
 	 */
 	SELECTORSETUP = 0x00;
 	MORSESETUP = 0xFF;
 
+	foxNo = SELECTOR & 0x0F;
+	foxes = (SELECTOR & 0xF0)>>4;
 	/*
 	 * counter/timer register setup
 	 */
 
-	timerInit(0x400);
+	timerInit(0x8842);
 
 	sei();
 	
@@ -34,6 +39,10 @@ int main(void)
 		 * 4. setup sleep time for wakeing up
 		 * 5. loop sleep untill we are supposed to wake up
 		 */
+		for (fox = 0;fox<foxNo;fox++)
+		{
+			//sleep for a minute
+		}
 		sendChar(28);//S
 		sendChar(24);//O
 		sendChar(28);//S
@@ -42,5 +51,9 @@ int main(void)
 		sendChar(24);//O
 		sendChar(28);//S
 		space();
+		for (;fox<foxes;fox++)
+		{
+			// do the sleep thing again
+		}
 	}
 }
