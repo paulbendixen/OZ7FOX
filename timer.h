@@ -6,6 +6,9 @@
 void timerInit(int timerCompare);
 void setTimer(int timerCompare);
 void resetTimer( void );
+void enaFastTimer( void );
+void enaSlowTimer( void );
+void disFastTimer( void );
+void disSlowTimer( void );
 
-//void ISR(TIMER1_COMPA_vect);
 #endif //TIMER_H

@@ -3,7 +3,7 @@
 #include <avr/io.h>
 
 #ifndef F_CPU
-#define F_CPU 4000000UL
+#define F_CPU 1000000UL
 //#define F_CPU 3696400
 #endif
 
@@ -16,5 +16,7 @@
 #define FOXA 0x01
 #define FOXU 0x02
 #define FOXV 0x04
+
+extern uint8_t minuteCounter;
 
 #endif // GLOBALS_H
