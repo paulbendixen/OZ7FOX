@@ -20,8 +20,12 @@ int main(void)
 	MORSESETUP = 0xFF;
 
 	DDRD = 1<<7;
+	/*
 	foxNo = SELECTOR & 0x0F;
 	foxes = (SELECTOR & 0xF0)>>4;
+	*/
+	foxNo = 0;
+	foxes = 4;
 	/*
 	 * counter/timer register setup
 	 */
@@ -48,24 +52,27 @@ int main(void)
 		for (fox = 0;fox<foxNo;fox++)
 		{
 			//sleep for a minute
-			while (minuteCounter > 0);
-			
+			//MORSEPORT ^= 0x10;
+			//while (minuteCounter > 0);
+			deepSleep();
+			MORSEPORT ^=0x20;
 		}
 		disSlowTimer();
 		enaFastTimer();
 		
-		//sendChar(28);//S
-		//sendChar(24);//O
-		//sendChar(28);//S
-		//charSpace();
-		//sendChar(28);//S
-		//sendChar(24);//O
-		//sendChar(28);//S
-		//space();
-		disSlowTimer();
+		sendChar(24);//O
+		sendChar(35);//Z
+		sendChar(7);//7
+		sendChar(15);//F
+		sendChar(24);//O
+		sendChar(33);//X
+		space();
+		disFastTimer();
 		enaSlowTimer();
 		for (;fox<foxes;fox++)
 		{
+			MORSEPORT ^=0x20;
+			deepSleep();
 			// do the sleep thing again
 		}
 	}

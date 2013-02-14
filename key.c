@@ -106,6 +106,16 @@ void delay(int press)
 	}
 }
 
+void deepSleep( void )
+{
+	cli();
+	sleep_enable();
+	set_sleep_mode(SLEEP_MODE_EXT_STANDBY);
+	sei();
+	sleep_cpu();
+	sleep_disable();
+}
+
 void sendChar(unsigned char morseCh)
 {
 	int i;

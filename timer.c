@@ -9,9 +9,11 @@ void timerInit(int timerCompare)
 	// Setup for timer/counter 2
 	ASSR = 1<<AS2;
 	while((ASSR & 0x07)!=0);
-	TCCR2 = (1<<COM20)|(1<<WGM21)|(1<<CS20)|(1<<CS21)|(1<<CS22);
+	// TCCR2 [FOC2|WGM20|COM21|COM20][WGM21|CS22|SC21|CS20]
+	TCCR2 = 0x1F;//0b0001 1111
+	//TCCR2 = (1<<COM20)|(1<<WGM21)|(1<<CS20)|(1<<CS21)|(1<<CS22);
 	TCNT2 = 0;
-	OCR2 = 192;
+	OCR2 = 95;
 	//TIMSK |= (1<<OCIE1A)|(1<<OCIE2);
 
 	
@@ -60,5 +62,5 @@ ISR(TIMER2_COMP_vect)
 {
 	if (++minuteCounter == 10)
 		minuteCounter = 0;
-	//MORSEPORT ^= 0x10;
+	MORSEPORT ^= 0x10;
 }
