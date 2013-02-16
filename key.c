@@ -1,81 +1,40 @@
 #include "key.h"
-
-const uint8_t lengths[] = { 5,//0
-5,//1
-5,//2
-5,//3
-5,//4
-5,//5
-5,//6
-5,//7
-5,//8
-5,//9
-2,//a
-4,//b
-4,//c
-3,//d
-1,//e
-3,//f
-3,//g
-5,//h
-2,//i
-4,//j
-3,//k
-4,//l
-2,//m
-2,//n
-3,//o
-4,//p
-4,//q
-3,//r
-3,//s
-1,//t
-3,//u
-4,//v
-3,//w
-4,//x
-4,//y
-4//z
-};
-
-const uint8_t ditdah[36]= { 0x1F,//0
-0x1E,//1
-0x1C,//2
-0x18,//3
-0x10,//4
-0x00,//5
-0x01,//6
-0x03,//7
-0x07,//8
-0x0F,//9
-0x02,//a
-0x01,//b
-0x05,//c
-0x01,//d
-0x00,//e
-0x04,//f
-0x03,//g
-0x00,//h
-0x00,//i
-0x0E,//j
-0x05,//k
-0x02,//l
-0x03,//m
-0x01,//n
-0x07,//o
-0x06,//p
-0x0B,//q
-0x02,//r
-0x00,//s
-0x01,//t
-0x04,//u
-0x08,//v
-0x06,//w
-0x09,//x
-0x0D,//y
-0x03//z
-};
-
+const morse_char_t zero =     {DAH(0)|DAH(1)|DAH(2)|DAH(3)|DAH(4), 5};
+const morse_char_t one =      {DIT(0)|DAH(1)|DAH(2)|DAH(3)|DAH(4), 5};
+const morse_char_t two =      {DIT(0)|DIT(1)|DAH(2)|DAH(3)|DAH(4), 5};
+const morse_char_t three =    {DIT(0)|DIT(1)|DIT(2)|DAH(3)|DAH(4), 5};
+const morse_char_t four =     {DIT(0)|DIT(1)|DIT(2)|DIT(3)|DAH(4), 5};
+const morse_char_t five =     {DIT(0)|DIT(1)|DIT(2)|DIT(3)|DIT(4), 5};
+const morse_char_t six =      {DAH(0)|DIT(1)|DIT(2)|DIT(3)|DIT(4), 5};
+const morse_char_t seven =    {DAH(0)|DAH(1)|DIT(2)|DIT(3)|DIT(4), 5};
+const morse_char_t eight =    {DAH(0)|DAH(1)|DAH(2)|DIT(3)|DIT(4), 5};
+const morse_char_t nine =     {DAH(0)|DAH(1)|DAH(2)|DAH(3)|DIT(4), 5};
+const morse_char_t alpha =    {DIT(0)|DAH(1), 2};
+const morse_char_t bravo =    {DAH(0)|DIT(1)|DIT(2)|DIT(3), 4};
+const morse_char_t charlie =  {DAH(0)|DIT(1)|DAH(2)|DIT(3), 4};
+const morse_char_t delta =    {DAH(0)|DIT(1)|DIT(2), 3};
+const morse_char_t echo =     {DIT(0), 1};
+const morse_char_t foxtrot =  {DIT(0)|DIT(1)|DAH(2)|DIT(3), 4};
+const morse_char_t golf =     {DAH(0)|DAH(1)|DIT(2), 3};
+const morse_char_t hotel =    {DIT(0)|DIT(1)|DIT(2)|DIT(3), 4};
+const morse_char_t india =    {DIT(0)|DIT(1), 2};
+const morse_char_t juliet =   {DIT(0)|DAH(1)|DAH(2)|DAH(3), 4};
+const morse_char_t kilo =     {DAH(0)|DIT(1)|DAH(2), 3};
+const morse_char_t lima =     {DIT(0)|DAH(1)|DIT(2)|DIT(3), 4};
+const morse_char_t mike =     {DAH(0)|DAH(1), 2};
+const morse_char_t november = {DAH(0)|DIT(1)};
+const morse_char_t oscar =    {DAH(0)|DAH(1)|DAH(2), 3};
+const morse_char_t papa =     {DIT(0)|DAH(1)|DAH(2)|DIT(3), 4};
+const morse_char_t quebec =   {DAH(0)|DAH(1)|DIT(2)|DAH(3), 4};
+const morse_char_t romeo =    {DIT(0)|DAH(1)|DIT(2), 3};
+const morse_char_t sierra =   {DIT(0)|DIT(1)|DIT(2), 3};
+const morse_char_t tango =    {DAH(0), 1};
+const morse_char_t uniform =  {DIT(0)|DIT(1)|DAH(2), 3};
+const morse_char_t victor =   {DIT(0)|DIT(1)|DIT(2)|DAH(3), 4};
+const morse_char_t whisky =   {DIT(0)|DAH(1)|DAH(2), 3};
+const morse_char_t xray =     {DAH(0)|DIT(1)|DIT(2)|DAH(3), 4};
+const morse_char_t yankee =   {DAH(0)|DIT(1)|DAH(2)|DAH(3), 4};
+const morse_char_t zulu =     {DAH(0)|DAH(1)|DIT(2)|DIT(3), 4};
 
 void initMorseCounter(void)
 {
@@ -120,14 +79,13 @@ void deepSleep( void )
 	sleep_disable();
 }
 
-void sendChar(unsigned char morseCh)
+void sendChar(morse_char_t character)
 {
 	int i;
-
-	for (i =0;i<lengths[morseCh];++i)
+	for (i = 0; i < character.length; ++i)
 	{
 		MORSEPORT &= !MORSEPIN;
-		delay((ditdah[morseCh] & (1<<i))?3:1);
+		delay(EXTRACT_MORSE_BIT(i,character.pattern) ? 3 : 1 );
 		MORSEPORT |= MORSEPIN;
 		delay(1);
 	}
@@ -152,3 +110,4 @@ void space(void)
 	MORSEPORT |= MORSEPIN;
 	delay(6); // same as above, but with 7
 }
+

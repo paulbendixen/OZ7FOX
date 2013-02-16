@@ -60,12 +60,12 @@ int main(void)
 		disSlowTimer();
 		enaFastTimer();
 		
-		sendChar(24);//O
-		sendChar(35);//Z
-		sendChar(7);//7
-		sendChar(15);//F
-		sendChar(24);//O
-		sendChar(33);//X
+		sendChar(oscar);
+		sendChar(zulu);
+		sendChar(seven);
+		sendChar(foxtrot);
+		sendChar(oscar);
+		sendChar(xray);
 		space();
 		switch(foxNo)
 		{
