@@ -1,0 +1,18 @@
+/**
+@mainpage	OZ7FOX, The danish Foxhunt oss/osh project
+@author		Paul M. Bendixen <OZ6PMB> (lead designer),
+		Morten E. Bruhn <OZ1MB> (computer scientist),
+		Lars Harbo <OZ1IVA> (Radio hacker)
+
+
+
+Welcome to the OZ7FOX project, This project is released under a beerware
+license, you are free to use the source code and/or hardware layout found
+here as you will, but if you meet us, we would appreciate if you got us a beer.
+
+This project was started because we couldn't find any deecent open source and 
+open hardware Foxhunt radio projects.
+
+If you have any comments or improvements, please don't hesitate to implement
+them and send us a bugfix so that others can benifit from it too.
+*/
