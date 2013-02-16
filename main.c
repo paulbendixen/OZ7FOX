@@ -4,37 +4,36 @@
 #include "timer.h"
 #include "key.h"
 
+void sendFoxID(uint8_t fox_id); 
+void sendCallsign();
+void initPorts();
+
 int main(void)
 {
-	 // The number of this fox.
-	uint8_t foxNo;
-	 // The total number of foxes.
-	uint8_t foxes;
-	 // Counter variable for fox iteration.
-	uint8_t fox;
+	// The number of this fox.
+	uint8_t thisFoxNo;
+	// The total number of foxes.
+	uint8_t totalFoxNo;
+	// Counter variable for fox iteration.
+	uint8_t currentFox;
 
 	/*
 	 * do init stuff
 	 */
-	 // All selector ports are in input mode
-	SELECTORSETUP = 0x00;
-	 // All morse ports are output ports
-	MORSESETUP = 0xFF;
+	initPorts();
 
-	DDRD = 1 << 7;
 	/*
 	TODO: Make these parameters be selectable from dip switches
-	foxNo = SELECTOR & 0x0F;
-	foxes = (SELECTOR & 0xF0)>>4;
+	thisFoxNo = SELECTOR & 0x0F;
+	totalFoxNo = (SELECTOR & 0xF0)>>4;
 	*/
-	foxNo = 0;
-	foxes = 4;
-	/*
-	 * counter/timer register setup
-	 */
-
+	thisFoxNo = 0;
+	totalFoxNo = 4;
+	
+	// counter/timer register setup
 	timerInit(FAST_TIMER_COUNT,SLOW_TIMER_COUNT);
 
+	// Enable interrupts.
 	sei();
 	
 	/* Main loop */
@@ -52,7 +51,7 @@ int main(void)
 		 */
 
 		enaSlowTimer();
-		for (fox = 0;fox<foxNo;fox++)
+		for (currentFox = 0; currentFox < thisFoxNo; currentFox++)
 		{
 			//sleep for a minute
 			//MORSEPORT ^= 0x10;
@@ -63,76 +62,85 @@ int main(void)
 		disSlowTimer();
 		enaFastTimer();
 		
-		sendChar(oscar);
-		sendChar(zulu);
-		sendChar(seven);
-		sendChar(foxtrot);
-		sendChar(oscar);
-		sendChar(xray);
-		space();
-		switch(foxNo)
-		{
-			case 1:
-				sendChar(alpha);	//A
-				break;
-			case 2:
-				sendChar(uniform);	//U
-				break;
-			case 3:
-				sendChar(victor);	//V
-				break;
-			case 4:
-				sendChar(four);	//4
-				break;
-			case 5:
-				sendChar(five);	//5
-				break;
-			default:
-				break;
-		}
-		sendLongBeep();
-		space();
-		sendLongBeep();
-		space();
-		sendChar(oscar);
-		sendChar(zulu);
-		sendChar(seven);
-		sendChar(foxtrot);
-		sendChar(oscar);
-		sendChar(xray);
-		space();
-		switch(foxNo)
-		{
-			case 1:
-				sendChar(alpha);	//A
-				break;
-			case 2:
-				sendChar(uniform);	//U
-				break;
-			case 3:
-				sendChar(victor);	//V
-				break;
-			case 4:
-				sendChar(four);	//4
-				break;
-			case 5:
-				sendChar(five);	//5
-				break;
-			default:
-				break;
-		}
-		
+		sendFoxID(thisFoxNo);
 
+		sendLongBeep();
+		space();
+		sendLongBeep();
+		space();
+		
+		sendFoxID(thisFoxNo);
 
 		disFastTimer();
 		enaSlowTimer();
-		fox++; // count ourselves
+		
+		currentFox++; // count ourselves
 		synchronizeTick();
-		for (;fox<foxes;fox++)
+		for (; currentFox < totalFoxNo; currentFox++)
 		{
-			MORSEPORT ^=(0x10<<fox);;
+			MORSEPORT ^=(0x10<<currentFox);;
 			deepSleep();
 			// do the sleep thing again
 		}
 	}
+}
+
+/*
+	Send the complete ID for this fox.
+	It consists of its callsign followed by
+	its number.
+*/
+void sendFoxID(uint8_t fox_id) 
+{
+		sendCallsign();
+		switch(fox_id)
+		{
+			case 1:
+				sendChar(alpha);	//A
+				break;
+			case 2:
+				sendChar(uniform);	//U
+				break;
+			case 3:
+				sendChar(victor);	//V
+				break;
+			case 4:
+				sendChar(four);	//4
+				break;
+			case 5:
+				sendChar(five);	//5
+				break;
+			default:
+				break;
+		}
+}
+
+/*
+	Broadcast "OZ7FOX", which is the call for all
+	foxes in OZ-land (DK).
+*/
+void sendCallsign() 
+{
+		sendChar(oscar);
+		sendChar(zulu);
+		sendChar(seven);
+		sendChar(foxtrot);
+		sendChar(oscar);
+		sendChar(xray);
+}
+
+/*
+	Initialize the ports on the microprocessor as
+	either input or output ports.
+*/
+void initPorts() 
+{
+	// All selector ports are in input mode
+	SELECTORSETUP = 0x00;
+	// All morse ports are output ports
+	MORSESETUP = 0xFF;
+#ifndef NDEBUG
+	// D7 toggles every time 6 second timer triggers. Make D7 output.
+	DDRD = 1 << 7;
+#endif
 }

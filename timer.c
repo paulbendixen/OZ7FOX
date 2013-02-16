@@ -188,7 +188,9 @@ ISR(TIMER1_COMPA_vect)
  */
 ISR(TIMER2_COMP_vect)
 {
-	if (++minuteCounter == 10)
-		minuteCounter = 0;
+   // deepSleep() has taken over this functionality.
+
+	//if (++minuteCounter == 10)
+	//	minuteCounter = 0;
 	//MORSEPORT ^= 0x10;
 }
