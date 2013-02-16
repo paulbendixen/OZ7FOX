@@ -3,11 +3,15 @@
 #include "globals.h"
 #include "timer.h"
 #include "key.h"
+#include "main.h"
 
-int sendFoxID(uint8_t fox_id); 
-int sendCallsign();
-void initPorts();
-
+/**
+   @file main.c
+   @brief Main function.
+   @return status code (never returns)
+   
+   The main function does all the fun stuff.
+*/
 int main(void)
 {
 	/// The number of this fox.
@@ -25,6 +29,7 @@ int main(void)
 
 	/*
 	TODO: Make these parameters be selectable from dip switches
+         or a similar device instead of being statically defined.
 	thisFoxNo = SELECTOR & 0x0F;
 	totalFoxNo = (SELECTOR & 0xF0)>>4;
 	*/
@@ -52,42 +57,53 @@ int main(void)
 		 */
 
 		enaSlowTimer();
+      /* Count through the foxes, wait for it to be our turn. */
 		for (currentFox = 0; currentFox < thisFoxNo; currentFox++)
 		{
 			//sleep for a minute
-			//MORSEPORT ^= 0x10;
-			//while (minuteCounter > 0);
 			deepSleep();
-			MORSEPORT ^=0x20;
+#ifndef NDEBUG
+			MORSEPORT ^= 0x20;
+#endif
 		}
+      // Disable the slow timer (for sleeping) and enable the fast timer (for keying)
 		disSlowTimer();
 		enaFastTimer();
 
+      // Send this fox' ID (including callsign) and record the time spend doing this.
 		timeSpent = sendFoxID(thisFoxNo);
       
+      // Send two consecutitve long beeps followed by short spaces.
 		sendLongBeep(HALF_MINUTE - 4*SPACE_LENGTH - timeSpent);
 		space();
 		sendLongBeep(HALF_MINUTE - 4*SPACE_LENGTH - timeSpent);
 		space();
 		
+      // retransmit the fox id.
 		sendFoxID(thisFoxNo);
 
-		disFastTimer();
+      // Disable the fast timer (for keying) and enable the slow timer (for sleeping) 		
+      disFastTimer();
 		enaSlowTimer();
 		
 		currentFox++; // count ourselves
 		synchronizeTick();
 		for (; currentFox < totalFoxNo; currentFox++)
 		{
+#ifndef NDEBUG
 			MORSEPORT ^=(0x10<<currentFox);;
+#endif
 			deepSleep();
 			// do the sleep thing again
 		}
 	}
 }
 
-/*
-	Send the complete ID for this fox.
+/**
+   @brief Send the complete ID for this fox.
+   @param fox_id The ID of the fox
+   @return The number of morse tics spent transmitting the fox ID
+
 	It consists of its callsign followed by
 	its number.
 */
@@ -112,8 +128,11 @@ int sendFoxID(uint8_t fox_id)
 	}
 }
 
-/*
-	Broadcast "OZ7FOX", which is the call for all
+/**
+   @brief Broadcast "OZ7FOX"
+   @return The number of morse tics spent transmitting "OZ7FOX"
+   
+   OZ7FOX is the call for all
 	foxes in OZ-land (DK).
 */
 int sendCallsign() 
@@ -128,9 +147,8 @@ int sendCallsign()
       return count;
 }
 
-/*
-	Initialize the ports on the microprocessor as
-	either input or output ports.
+/**
+   @brief Initialize the ports on the microprocessor as either input or output ports.
 */
 void initPorts() 
 {

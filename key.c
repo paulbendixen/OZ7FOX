@@ -4,7 +4,6 @@
    that are supported. They are declared as extern in key.h
    and are thus visible for other source files linking
    with this program. */
-
 const morse_char_t zero =     {DAH(0)|DAH(1)|DAH(2)|DAH(3)|DAH(4), 5};
 const morse_char_t one =      {DIT(0)|DAH(1)|DAH(2)|DAH(3)|DAH(4), 5};
 const morse_char_t two =      {DIT(0)|DIT(1)|DAH(2)|DAH(3)|DAH(4), 5};
@@ -28,7 +27,7 @@ const morse_char_t juliet =   {DIT(0)|DAH(1)|DAH(2)|DAH(3), 4};
 const morse_char_t kilo =     {DAH(0)|DIT(1)|DAH(2), 3};
 const morse_char_t lima =     {DIT(0)|DAH(1)|DIT(2)|DIT(3), 4};
 const morse_char_t mike =     {DAH(0)|DAH(1), 2};
-const morse_char_t november = {DAH(0)|DIT(1)};
+const morse_char_t november = {DAH(0)|DIT(1), 2};
 const morse_char_t oscar =    {DAH(0)|DAH(1)|DAH(2), 3};
 const morse_char_t papa =     {DIT(0)|DAH(1)|DAH(2)|DIT(3), 4};
 const morse_char_t quebec =   {DAH(0)|DAH(1)|DIT(2)|DAH(3), 4};
