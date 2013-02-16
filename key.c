@@ -67,11 +67,15 @@ void delay(int press)
 
 void deepSleep( void )
 {
+	int i;
 	cli();
 	sleep_enable();
 	set_sleep_mode(SLEEP_MODE_EXT_STANDBY);
 	sei();
-	sleep_cpu();
+	for (i=0;i<10;i++)
+	{
+		sleep_cpu();
+	}
 	sleep_disable();
 }
 
