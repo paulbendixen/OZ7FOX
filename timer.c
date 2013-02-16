@@ -153,7 +153,6 @@ void enaSlowTimer( void )
 	TIMSK |= 1<<OCIE2;
 	// synchronize with the next one minute tick
 	// TODO Actually synchronize
-#warning Do some synchronization before next clock tick
 }
 
 /**
