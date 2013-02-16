@@ -65,9 +65,9 @@ int main(void)
 
 		timeSpent = sendFoxID(thisFoxNo);
       
-		sendLongBeep(HALF_MINUTE - SPACE_LENGTH - timeSpent);
+		sendLongBeep(HALF_MINUTE - 4*SPACE_LENGTH - timeSpent);
 		space();
-		sendLongBeep(HALF_MINUTE - SPACE_LENGTH - timeSpent);
+		sendLongBeep(HALF_MINUTE - 4*SPACE_LENGTH - timeSpent);
 		space();
 		
 		sendFoxID(thisFoxNo);
@@ -93,22 +93,23 @@ int main(void)
 */
 int sendFoxID(uint8_t fox_id) 
 {
-		sendCallsign();
-		switch(fox_id)
-		{
-			case 1:
-				return sendChar(alpha);	//A
-			case 2:
-				return sendChar(uniform);	//U
-			case 3:
-				return sendChar(victor);	//V
-			case 4:
-				return sendChar(four);	//4
-			case 5:
-				return sendChar(five);	//5
-			default:
-            return 0;
-		}
+	int totalLength;
+	totalLength = sendCallsign();
+	switch(fox_id)
+	{
+		case 0:
+			return totalLength + sendChar(alpha);	//A
+		case 1:
+			return totalLength + sendChar(uniform);	//U
+		case 2:
+			return totalLength + sendChar(victor);	//V
+		case 3:
+			return totalLength + sendChar(four);	//4
+		case 4:
+			return totalLength + sendChar(five);	//5
+		default:
+			return totalLength;
+	}
 }
 
 /*

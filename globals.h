@@ -41,6 +41,7 @@ corresponds to 65 milliseconds.
    
 See ATMega16 datasheet p. 100
 */
+
 #define MORSE_COUNTER_COMPARE_VALUE ((MORSE_UNIT_IN_MILLIS * (F_CPU / 1000UL)) - 1)
 #if MORSE_COUNTER_COMPARE_VALUE > 0xFFFF
 #error MORSE_COUNTER_COMPARE_VALUE too large (>65536). Do something (RTAVRM)

@@ -42,20 +42,38 @@ const morse_char_t xray =     {DAH(0)|DIT(1)|DIT(2)|DAH(3), 4};
 const morse_char_t yankee =   {DAH(0)|DIT(1)|DAH(2)|DAH(3), 4};
 const morse_char_t zulu =     {DAH(0)|DAH(1)|DIT(2)|DIT(3), 4};
 
+/**
+ * @brief	THIS IS THE ONE THAT SENDS A MORSE CHARACTER :D
+ * @param	chararcter The morse_char_t character to send
+ * @return	Returns the total number of morse ticks consumed
+ *
+ * This function iterates through the morse_char_t struct, sending
+ * out the dits and dahs.
+ */
 int sendChar(morse_char_t character)
 {
-	int i, countLength = 0;
+	int i, counter, totalCount = 0;
 	for (i = 0; i < character.length; ++i)
 	{
 		MORSEPORT &= !MORSEPIN;
-		delay(countLength += (EXTRACT_MORSE_BIT(i,character.pattern) ? 3 : 1 ));
-      countLength++;
+		counter = (EXTRACT_MORSE_BIT(i,character.pattern) ? 3 : 1 );
+		delay(counter);
+		totalCount += counter +1;
 		MORSEPORT |= MORSEPIN;
 		delay(1);
 	}
-   return countLength;
+   return totalCount;
 }
 
+
+/**
+ * @brief	Sends the beep used for tracking
+ * @param	morse_ticks The number of morse ticks the beep should be
+ *
+ * This function sends out the long beep that the hunters use to track.
+ * The length of the beep must be so that the \e complete transmission is less
+ * than one minute.
+ */
 void sendLongBeep(unsigned int morse_ticks)
 {
 	MORSEPORT &= !MORSEPIN;
