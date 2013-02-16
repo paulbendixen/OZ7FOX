@@ -1,4 +1,10 @@
 #include "key.h"
+
+/* Initialization of constants corresponding to the characters
+   that are supported. They are declared as extern in key.h
+   and are thus visible for other source files linking
+   with this program. */
+
 const morse_char_t zero =     {DAH(0)|DAH(1)|DAH(2)|DAH(3)|DAH(4), 5};
 const morse_char_t one =      {DIT(0)|DAH(1)|DAH(2)|DAH(3)|DAH(4), 5};
 const morse_char_t two =      {DIT(0)|DIT(1)|DAH(2)|DAH(3)|DAH(4), 5};

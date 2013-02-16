@@ -3,6 +3,12 @@
 #include "globals.h"
 #include "timer.h"
 
+/* Macros to generate a bit pattern
+   conrresponsing to a dit (dot) or dah (dash)
+   at a given position. These can be composited
+   using the logical OR (|) to form strings
+   of morse characters.
+*/
 #define DAH(n) (1 << (7-n))
 #define DIT(n) (0 << (7-n))
 
