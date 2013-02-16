@@ -31,7 +31,7 @@ int main(void)
 	totalFoxNo = 4;
 	
 	// counter/timer register setup
-	timerInit(FAST_TIMER_COUNT,SLOW_TIMER_COUNT);
+	timerInit(MILLIS_TO_FAST_TIMER_COUNT(60),SLOW_TIMER_COUNT);
 
 	// Enable interrupts.
 	sei();

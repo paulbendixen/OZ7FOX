@@ -17,9 +17,19 @@
 #define FOXU 0x02
 #define FOXV 0x04
 
+/**
+   Timer count = t_milis / prescaler * (F_CPU / 1000) - 1
 
-//See ATMega16 datasheet p. 100
-#define FAST_TIMER_COUNT 0x8842
+   The macro MUST NOT exceed the maximum number of
+   timer counts which is 2^16 counts.
+
+   For a processor clocked at 1MHz, this roughly
+   corresponds to 65 milliseconds. 
+   
+   See ATMega16 datasheet p. 100
+*/
+#define MILLIS_TO_FAST_TIMER_COUNT(t) ((t * (F_CPU / 1000UL)) - 1)
+
 
 /* The Interrupt is fired twice a f_{OC2} cycle, since it is the one
  * that toggles the output so t_{OC2} should be 12s.
