@@ -67,6 +67,60 @@ int main(void)
 		sendChar(24);//O
 		sendChar(33);//X
 		space();
+		switch(foxNo)
+		{
+			case 1:
+				sendChar(0xa);	//A
+				break;
+			case 2:
+				sendChar(30);	//U
+				break;
+			case 3:
+				sendChar(31);	//V
+				break;
+			case 4:
+				sendChar(4);	//4
+				break;
+			case 5:
+				sendChar(5);	//5
+				break;
+			default:
+				break;
+		}
+		sendLongBeep();
+		space();
+		sendLongBeep();
+		space();
+		sendChar(24);//O
+		sendChar(35);//Z
+		sendChar(7);//7
+		sendChar(15);//F
+		sendChar(24);//O
+		sendChar(33);//X
+		space();
+		switch(foxNo)
+		{
+			case 1:
+				sendChar(0xa);	//A
+				break;
+			case 2:
+				sendChar(30);	//U
+				break;
+			case 3:
+				sendChar(31);	//V
+				break;
+			case 4:
+				sendChar(4);	//4
+				break;
+			case 5:
+				sendChar(5);	//5
+				break;
+			default:
+				break;
+		}
+		
+
+
 		disFastTimer();
 		enaSlowTimer();
 		for (;fox<foxes;fox++)

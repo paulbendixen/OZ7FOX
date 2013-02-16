@@ -133,6 +133,14 @@ void sendChar(unsigned char morseCh)
 	}
 }
 
+void sendLongBeep(void)
+{
+	MORSEPORT &= !MORSEPIN;
+	// Send about half a minute = 860 ticks
+	// minus the time used for sending out callsign
+	delay(676); // OZ7FOX 4 is max length  =91
+}
+
 void charSpace(void)
 {
 	MORSEPORT |= MORSEPIN;

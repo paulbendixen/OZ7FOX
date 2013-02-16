@@ -10,6 +10,7 @@ void stopCounter(void);
 void key(int press);
 void deepSleep(void);
 void sendChar(unsigned char morseCh);
+void sendLongBeep(void);
 void charSpace(void);
 void space(void);
 #endif //KEY_H
