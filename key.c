@@ -42,47 +42,39 @@ const morse_char_t xray =     {DAH(0)|DIT(1)|DIT(2)|DAH(3), 4};
 const morse_char_t yankee =   {DAH(0)|DIT(1)|DAH(2)|DAH(3), 4};
 const morse_char_t zulu =     {DAH(0)|DAH(1)|DIT(2)|DIT(3), 4};
 
-void initMorseCounter(void)
+int sendChar(morse_char_t character)
 {
-}
-
-void startCounter(void)
-{
-}
-
-void stopCounter(void)
-{
-}
-
-void sendChar(morse_char_t character)
-{
-	int i;
+	int i, countLength = 0;
 	for (i = 0; i < character.length; ++i)
 	{
 		MORSEPORT &= !MORSEPIN;
-		delay(EXTRACT_MORSE_BIT(i,character.pattern) ? 3 : 1 );
+		delay(countLength += (EXTRACT_MORSE_BIT(i,character.pattern) ? 3 : 1 ));
+      countLength++;
 		MORSEPORT |= MORSEPIN;
 		delay(1);
 	}
+   return countLength;
 }
 
-void sendLongBeep(void)
+void sendLongBeep(unsigned int morse_ticks)
 {
 	MORSEPORT &= !MORSEPIN;
 	// Send about half a minute = 860 ticks
 	// minus the time used for sending out callsign
-	delay(676); // OZ7FOX 4 is max length  =91
+	delay(morse_ticks); // OZ7FOX 4 is max length  =91
 }
 
-void charSpace(void)
+int charSpace(void)
 {
 	MORSEPORT |= MORSEPIN;
 	delay(2); // should wait 3, we already waited 1
+   return 2;
 }
 
-void space(void)
+int space(void)
 {
 	MORSEPORT |= MORSEPIN;
 	delay(6); // same as above, but with 7
+   return 6;
 }
 
