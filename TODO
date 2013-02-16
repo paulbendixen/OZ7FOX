@@ -4,7 +4,4 @@ Rework the Morsing part to consume about one minute
 	As it is now, the morse part does not take one minute which gives the
 	problem that foxes will be off.
 
-Find a way to make a very long tone
-	Perhaps make a special sendChar option to send a tone that is about
-	half a minute.
 

@@ -31,6 +31,48 @@ void resetTimer( void )
 	TCNT1 = 0;
 }
 
+
+void delay(int press)
+{
+	int i;
+	for (i = 0; i< press; ++i)
+	{
+		cli();
+		sleep_enable();
+		// set sleep mode
+		resetTimer();
+		set_sleep_mode(SLEEP_MODE_IDLE);
+		sei();
+		// do the sleep thing
+		sleep_cpu();
+		sleep_disable();
+	}
+}
+
+void deepSleep( void )
+{
+	int i;
+	cli();
+	sleep_enable();
+	set_sleep_mode(SLEEP_MODE_EXT_STANDBY);
+	sei();
+	for (i=0;i<10;i++)
+	{
+		sleep_cpu();
+	}
+	sleep_disable();
+}
+
+void synchronizeTick( void )
+{
+	cli();
+	sleep_enable();
+	set_sleep_mode(SLEEP_MODE_EXT_STANDBY);
+	sei();
+	sleep_cpu();
+	sleep_disable();
+}
+
 void enaFastTimer( void )
 {
 	// make sure an interrupt is not going to happen

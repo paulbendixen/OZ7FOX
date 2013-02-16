@@ -2,7 +2,6 @@
 #define KEY_H
 #include "globals.h"
 #include "timer.h"
-#include <avr/sleep.h>
 
 #define DAH(n) (1 << (7-n))
 #define DIT(n) (0 << (7-n))
@@ -60,7 +59,6 @@ void startCounter(void);
 void stopCounter(void);
 void key(int press);
 void sendChar(morse_char_t character);
-void deepSleep(void);
 void sendLongBeep(void);
 void charSpace(void);
 void space(void);

@@ -70,19 +70,19 @@ int main(void)
 		switch(foxNo)
 		{
 			case 1:
-				sendChar(0xa);	//A
+				sendChar(alpha);	//A
 				break;
 			case 2:
-				sendChar(30);	//U
+				sendChar(uniform);	//U
 				break;
 			case 3:
-				sendChar(31);	//V
+				sendChar(victor);	//V
 				break;
 			case 4:
-				sendChar(4);	//4
+				sendChar(four);	//4
 				break;
 			case 5:
-				sendChar(5);	//5
+				sendChar(five);	//5
 				break;
 			default:
 				break;
@@ -91,29 +91,29 @@ int main(void)
 		space();
 		sendLongBeep();
 		space();
-		sendChar(24);//O
-		sendChar(35);//Z
-		sendChar(7);//7
-		sendChar(15);//F
-		sendChar(24);//O
-		sendChar(33);//X
+		sendChar(oscar);
+		sendChar(zulu);
+		sendChar(seven);
+		sendChar(foxtrot);
+		sendChar(oscar);
+		sendChar(xray);
 		space();
 		switch(foxNo)
 		{
 			case 1:
-				sendChar(0xa);	//A
+				sendChar(alpha);	//A
 				break;
 			case 2:
-				sendChar(30);	//U
+				sendChar(uniform);	//U
 				break;
 			case 3:
-				sendChar(31);	//V
+				sendChar(victor);	//V
 				break;
 			case 4:
-				sendChar(4);	//4
+				sendChar(four);	//4
 				break;
 			case 5:
-				sendChar(5);	//5
+				sendChar(five);	//5
 				break;
 			default:
 				break;
@@ -123,6 +123,8 @@ int main(void)
 
 		disFastTimer();
 		enaSlowTimer();
+		fox++; // count ourselves
+		synchronizeTick();
 		for (;fox<foxes;fox++)
 		{
 			MORSEPORT ^=(0x10<<fox);;
