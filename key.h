@@ -67,6 +67,7 @@ void stopCounter(void);
 void key(int press);
 void sendChar(morse_char_t character);
 void deepSleep(void);
+void sendLongBeep(void);
 void charSpace(void);
 void space(void);
 
