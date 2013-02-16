@@ -4,19 +4,20 @@
 #include "timer.h"
 #include "key.h"
 
-void sendFoxID(uint8_t fox_id); 
-void sendCallsign();
+int sendFoxID(uint8_t fox_id); 
+int sendCallsign();
 void initPorts();
 
 int main(void)
 {
-	// The number of this fox.
+	/// The number of this fox.
 	uint8_t thisFoxNo;
-	// The total number of foxes.
+	/// The total number of foxes.
 	uint8_t totalFoxNo;
-	// Counter variable for fox iteration.
+	/// Counter variable for fox iteration.
 	uint8_t currentFox;
-
+   /// Time spent transmitting
+   unsigned int timeSpent;
 	/*
 	 * do init stuff
 	 */
@@ -31,7 +32,7 @@ int main(void)
 	totalFoxNo = 4;
 	
 	// counter/timer register setup
-	timerInit(MILLIS_TO_FAST_TIMER_COUNT(60),SLOW_TIMER_COUNT);
+	timerInit(MORSE_COUNTER_COMPARE_VALUE,SLOW_TIMER_COUNT);
 
 	// Enable interrupts.
 	sei();
@@ -61,12 +62,12 @@ int main(void)
 		}
 		disSlowTimer();
 		enaFastTimer();
-		
-		sendFoxID(thisFoxNo);
 
-		sendLongBeep();
+		timeSpent = sendFoxID(thisFoxNo);
+      
+		sendLongBeep(HALF_MINUTE - SPACE_LENGTH - timeSpent);
 		space();
-		sendLongBeep();
+		sendLongBeep(HALF_MINUTE - SPACE_LENGTH - timeSpent);
 		space();
 		
 		sendFoxID(thisFoxNo);
@@ -90,28 +91,23 @@ int main(void)
 	It consists of its callsign followed by
 	its number.
 */
-void sendFoxID(uint8_t fox_id) 
+int sendFoxID(uint8_t fox_id) 
 {
 		sendCallsign();
 		switch(fox_id)
 		{
 			case 1:
-				sendChar(alpha);	//A
-				break;
+				return sendChar(alpha);	//A
 			case 2:
-				sendChar(uniform);	//U
-				break;
+				return sendChar(uniform);	//U
 			case 3:
-				sendChar(victor);	//V
-				break;
+				return sendChar(victor);	//V
 			case 4:
-				sendChar(four);	//4
-				break;
+				return sendChar(four);	//4
 			case 5:
-				sendChar(five);	//5
-				break;
+				return sendChar(five);	//5
 			default:
-				break;
+            return 0;
 		}
 }
 
@@ -119,14 +115,16 @@ void sendFoxID(uint8_t fox_id)
 	Broadcast "OZ7FOX", which is the call for all
 	foxes in OZ-land (DK).
 */
-void sendCallsign() 
+int sendCallsign() 
 {
-		sendChar(oscar);
-		sendChar(zulu);
-		sendChar(seven);
-		sendChar(foxtrot);
-		sendChar(oscar);
-		sendChar(xray);
+      int count = 0;
+		count += sendChar(oscar);
+		count += sendChar(zulu);
+		count += sendChar(seven);
+		count += sendChar(foxtrot);
+		count += sendChar(oscar);
+		count += sendChar(xray);
+      return count;
 }
 
 /*

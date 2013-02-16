@@ -17,6 +17,8 @@
 #define FOXU 0x02
 #define FOXV 0x04
 
+#define MORSE_UNIT_IN_MILLIS 60
+
 /**
    Timer count = t_milis / prescaler * (F_CPU / 1000) - 1
 
@@ -28,7 +30,10 @@
    
    See ATMega16 datasheet p. 100
 */
-#define MILLIS_TO_FAST_TIMER_COUNT(t) ((t * (F_CPU / 1000UL)) - 1)
+#define MORSE_COUNTER_COMPARE_VALUE ((MORSE_UNIT_IN_MILLIS * (F_CPU / 1000UL)) - 1)
+#if MORSE_COUNTER_COMPARE_VALUE > 0xFFFF
+#error MORSE_COUNTER_COMPARE_VALUE too large (>65536). Do something (RTAVRM)
+#endif
 
 
 /* The Interrupt is fired twice a f_{OC2} cycle, since it is the one
@@ -42,6 +47,8 @@
  *             F_clkIO          32.768
  */
 #define SLOW_TIMER_COUNT 191
+#define SPACE_LENGTH 7
+#define HALF_MINUTE (30000 / MORSE_UNIT_IN_MILLIS)
 
 extern uint8_t minuteCounter;
 

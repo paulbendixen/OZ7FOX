@@ -60,13 +60,10 @@ extern const morse_char_t xray;
 extern const morse_char_t yankee;
 extern const morse_char_t zulu;
 
-void initMorseCounter(void);
-void startCounter(void);
-void stopCounter(void);
 void key(int press);
-void sendChar(morse_char_t character);
-void sendLongBeep(void);
-void charSpace(void);
-void space(void);
+int sendChar(morse_char_t character);
+void sendLongBeep(unsigned int morse_ticks);
+int charSpace(void);
+int space(void);
 
 #endif //KEY_H
