@@ -1,3 +1,7 @@
+/**
+ * @file	globals.h
+ * @brief	Assorted definitions we might use
+ */
 #ifndef GLOBALS_H
 #define GLOBALS_H
 #include <avr/io.h>
@@ -18,15 +22,22 @@
 #define FOXV 0x04
 
 /**
+@brief Converts the given time in ms to a clock tick defined by the CPU frq
+
+This timer calculates what count should go into the compare register for the 
+fast counter.
+
+The timer is calculated as:
+
    Timer count = t_milis / prescaler * (F_CPU / 1000) - 1
 
-   The macro MUST NOT exceed the maximum number of
+@warning	The macro MUST NOT exceed the maximum number of
    timer counts which is 2^16 counts.
 
-   For a processor clocked at 1MHz, this roughly
-   corresponds to 65 milliseconds. 
+For a processor clocked at 1MHz, the maximum time roughly
+corresponds to 65 milliseconds. 
    
-   See ATMega16 datasheet p. 100
+See ATMega16 datasheet p. 100
 */
 #define MILLIS_TO_FAST_TIMER_COUNT(t) ((t * (F_CPU / 1000UL)) - 1)
 
