@@ -1,3 +1,10 @@
+/**
+ * @file	key.c
+ * @brief	The implementation of the functions for keying the transmitter
+ * 
+ * All the actual transmission of dits and dahs are done from this file
+ */
+
 #include "key.h"
 
 /* Initialization of constants corresponding to the characters
@@ -82,6 +89,15 @@ void sendLongBeep(unsigned int morse_ticks)
 	delay(morse_ticks); // OZ7FOX 4 is max length  =91
 }
 
+/**
+ * @brief	Makes a space between characters
+ * @returns	Returns the number of morse ticks consumed
+ *
+ * This function holds a pause of two morse ticks.
+ * Actually the standard is to hold for three morseticks between characters
+ * but since all morse dits and dahs is followed by a single tick of silence
+ * only two ticks are nessecary
+ */
 int charSpace(void)
 {
 	MORSEPORT |= MORSEPIN;
@@ -89,6 +105,15 @@ int charSpace(void)
    return 2;
 }
 
+/**
+ * @brief	Makes an actual space character
+ * @return	Returns the number of morse ticks consumed
+ *
+ * This function holds a pause of six morse ticks.
+ * Actually the standard is to hold for seven morse ticks between words but
+ * since all morse dits and dahs in this implementation is followed by a single
+ * tick of silence, only six ticks are nessecary.
+ */
 int space(void)
 {
 	MORSEPORT |= MORSEPIN;
