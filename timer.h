@@ -1,3 +1,7 @@
+/**
+ * @file	timer.h
+ * @brief	The Header file for all things related to timers
+ */
 #ifndef TIMER_H
 #define TIMER_H
 #include "globals.h"
