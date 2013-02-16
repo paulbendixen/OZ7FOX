@@ -8,6 +8,7 @@ void initMorseCounter(void);
 void startCounter(void);
 void stopCounter(void);
 void key(int press);
+void deepSleep(void);
 void sendChar(unsigned char morseCh);
 void charSpace(void);
 void space(void);

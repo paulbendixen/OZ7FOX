@@ -3,7 +3,7 @@
 #include "globals.h"
 #include <avr/interrupt.h>
 
-void timerInit(int timerCompare);
+void timerInit(uint16_t fastTimerCompare, uint8_t slowTimerCompare);
 void setTimer(int timerCompare);
 void resetTimer( void );
 void enaFastTimer( void );

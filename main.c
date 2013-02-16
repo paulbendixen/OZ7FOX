@@ -30,7 +30,7 @@ int main(void)
 	 * counter/timer register setup
 	 */
 
-	timerInit(0x8842);
+	timerInit(FAST_TIMER_COUNT,SLOW_TIMER_COUNT);
 
 	sei();
 	
@@ -71,7 +71,7 @@ int main(void)
 		enaSlowTimer();
 		for (;fox<foxes;fox++)
 		{
-			MORSEPORT ^=0x20;
+			MORSEPORT ^=(0x10<<fox);;
 			deepSleep();
 			// do the sleep thing again
 		}
