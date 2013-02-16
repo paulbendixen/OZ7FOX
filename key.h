@@ -4,10 +4,10 @@
 #include "timer.h"
 
 /* Macros to generate a bit pattern
-   conrresponsing to a dit (dot) or dah (dash)
-   at a given position. These can be composited
-   using the logical OR (|) to form strings
-   of morse characters.
+	conrresponsing to a dit (dot) or dah (dash)
+	at a given position. These can be composited
+	using the logical OR (|) to form strings
+	of morse characters.
 */
 #define DAH(n) (1 << (7-n))
 #define DIT(n) (0 << (7-n))
@@ -19,8 +19,8 @@ typedef uint8_t morse_pattern_t;
 
 typedef struct 
 {
-   morse_pattern_t pattern;
-   morse_length_t length;
+	morse_pattern_t pattern;
+	morse_length_t length;
 } morse_char_t;
 
 extern const morse_char_t zero;

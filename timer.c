@@ -1,5 +1,19 @@
+/**
+ * @file	timer.c
+ * @brief	Implementation for all timer and timing
+ * @version	1.0
+ */
+
 #include "timer.h"
 
+/**
+ * @brief	Initializer for the timers
+ * @param	fastTimerCompare compare register setting for the fast timer
+ * @param	slowTimerCompare Compare register setting for the slow timer
+ *
+ * Sets up the registers needed for the two timers to run correctly.
+ * It does not set up any interrupts, so timers must be enabled otherwere
+ */
 void timerInit(uint16_t fastTimerCompare, uint8_t slowTimerCompare)
 {
 	// this should also at some point include setup for sleep on timer2
@@ -21,17 +35,31 @@ void timerInit(uint16_t fastTimerCompare, uint8_t slowTimerCompare)
 	//TIMSK |= (1<<OCIE1A)|(1<<OCIE2);
 }
 
+
+/**
+ * @brief Set the compare register for the fast timer
+ */
 void setTimer(int timerCompare)
 {
 	OCR1A = timerCompare;
 }
 
+/**
+ * @brief	Reset the timer, so that we count from zero
+ */
 void resetTimer( void )
 {
 	TCNT1 = 0;
 }
 
-
+/**
+ * @brief	Wait the defined number of morse ticks before going on
+ * @param	press the time to wait before continuing
+ *
+ * This function enables the fast timer and waits the number of timer ticks
+ * defined in the press parameter.
+ * The chip will be in idle mode while waiting for the timeout
+ */
 void delay(int press)
 {
 	int i;
@@ -49,6 +77,12 @@ void delay(int press)
 	}
 }
 
+/**
+ * @brief	Waits for one minute before returning, using low power mode
+ *
+ * This function sets the chip in the lowest power mode for six seconds and
+ * does this 10 times, this results in a one minute delay
+ */
 void deepSleep( void )
 {
 	int i;
@@ -63,6 +97,15 @@ void deepSleep( void )
 	sleep_disable();
 }
 
+/**
+ * @brief	Consume the last of the tick
+ * @pre		54 or more seconds must have passed of the transmission
+ * @post	The system is now in sync with the other foxes
+ *
+ * The function consumes the last of the 6 second tick that is currently
+ * running. This enambles synchronization of the system, so that counting
+ * of minutes is not started untill the others start counting also.
+ */
 void synchronizeTick( void )
 {
 	cli();
@@ -73,6 +116,11 @@ void synchronizeTick( void )
 	sleep_disable();
 }
 
+/**
+ * @brief	Enable interrupts for the fast timer
+ *
+ * This function allows the timer for morse timer to be enabled
+ */
 void enaFastTimer( void )
 {
 	// make sure an interrupt is not going to happen
@@ -81,11 +129,22 @@ void enaFastTimer( void )
 	TIMSK |= 1<<OCIE1A;
 }
 
+/**
+ * @brief	Disable the interrupt for the fast timer
+ *
+ * This function disables the interrupt on the fast timer so that a wrong
+ * system continuation is avoided
+ */
 void disFastTimer(void )
 {
 	TIMSK &= !(1<<OCIE1A);
 }
 
+/**
+ * @brief	Enable the interrupt for the slow timer
+ *
+ * This function allows the timer for the deep sleep timer to wake us up
+ */
 void enaSlowTimer( void )
 {
 	// Make sure an interrupt is not going to happen
@@ -97,11 +156,23 @@ void enaSlowTimer( void )
 #warning Do some synchronization before next clock tick
 }
 
+/**
+ * @brief	Disable the interrupt for the slow timer
+ *
+ * Disables the 6 second timer interrupt so that it does not interfere with 
+ * the morse code transmission
+ */
 void disSlowTimer( void )
 {
 	TIMSK &= !(1<<OCIE2);
 }
 
+/**
+ * @brief	Interrupt Service routine for the fast timer
+ *
+ * This function wakes up the system when the timer reaches the predifined state
+ * it does not do anything but can be used for debugging
+ */
 ISR(TIMER1_COMPA_vect)
 {
 	// This is where the magic happens
@@ -109,6 +180,12 @@ ISR(TIMER1_COMPA_vect)
 	// The magic is that the chip wakes up
 }
 
+/**
+ * @brief	Interrupt Service routine for the slow timer
+ *
+ * This function wakes up the system when the timer reaches the predifined state
+ * it does not do anything but can be used for debugging
+ */
 ISR(TIMER2_COMP_vect)
 {
 	if (++minuteCounter == 10)

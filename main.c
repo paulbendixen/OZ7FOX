@@ -6,24 +6,24 @@
 
 int main(void)
 {
-   // The number of this fox.
+	 // The number of this fox.
 	uint8_t foxNo;
-   // The total number of foxes.
+	 // The total number of foxes.
 	uint8_t foxes;
-   // Counter variable for fox iteration.
+	 // Counter variable for fox iteration.
 	uint8_t fox;
 
 	/*
 	 * do init stuff
 	 */
-   // All selector ports are in input mode
+	 // All selector ports are in input mode
 	SELECTORSETUP = 0x00;
-   // All morse ports are output ports
+	 // All morse ports are output ports
 	MORSESETUP = 0xFF;
 
 	DDRD = 1 << 7;
 	/*
-   TODO: Make these parameters be selectable from dip switches
+	TODO: Make these parameters be selectable from dip switches
 	foxNo = SELECTOR & 0x0F;
 	foxes = (SELECTOR & 0xF0)>>4;
 	*/
