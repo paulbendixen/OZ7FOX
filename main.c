@@ -4,7 +4,7 @@
 #include "timer.h"
 #include "key.h"
 
-uint8_t minuteCounter =0;
+uint8_t minuteCounter = 0;
 
 int main(void)
 {
