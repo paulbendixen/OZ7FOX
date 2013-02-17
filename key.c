@@ -8,9 +8,9 @@
 #include "key.h"
 
 /* Initialization of constants corresponding to the characters
-   that are supported. They are declared as extern in key.h
-   and are thus visible for other source files linking
-   with this program. */
+	that are supported. They are declared as extern in key.h
+	and are thus visible for other source files linking
+	with this program. */
 const morse_char_t zero =     {DAH(0)|DAH(1)|DAH(2)|DAH(3)|DAH(4), 5};
 const morse_char_t one =      {DIT(0)|DAH(1)|DAH(2)|DAH(3)|DAH(4), 5};
 const morse_char_t two =      {DIT(0)|DIT(1)|DAH(2)|DAH(3)|DAH(4), 5};
@@ -68,7 +68,7 @@ int sendChar(morse_char_t character)
 		MORSEPORT |= MORSEPIN;
 		delay(1);
 	}
-   return totalCount;
+	return totalCount;
 }
 
 
@@ -101,7 +101,7 @@ int charSpace(void)
 {
 	MORSEPORT |= MORSEPIN;
 	delay(2); // should wait 3, we already waited 1
-   return 2;
+	return 2;
 }
 
 /**
@@ -117,6 +117,6 @@ int space(void)
 {
 	MORSEPORT |= MORSEPIN;
 	delay(6); // same as above, but with 7
-   return 6;
+	return 6;
 }
 
