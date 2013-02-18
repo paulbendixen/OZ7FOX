@@ -21,8 +21,8 @@ int main(void)
 	uint8_t totalFoxNo;
 	/// Counter variable for fox iteration.
 	uint8_t currentFox;
-	/// Time spent transmitting
-	unsigned int timeSpent;
+	/// Time spent transmitting fox id (callsign and number)
+	ticks_t timeSpent;
 	/*
 	 * do init stuff
 	 */
@@ -73,12 +73,13 @@ int main(void)
 
 	   // Send this fox' ID (including callsign) and record the time spend doing this.
 		timeSpent = sendFoxID(thisFoxNo);
+      wordSpace(TICKS_INTRA_WORD);
 	   
 	   // Send two consecutitve long beeps followed by short spaces.
-		sendLongBeep(HALF_MINUTE - 4*SPACE_LENGTH - timeSpent);
-		space();
-		sendLongBeep(HALF_MINUTE - 4*SPACE_LENGTH - timeSpent);
-		space();
+		sendLongBeep(HALF_MINUTE - 4 * TICKS_INTER_WORD - timeSpent);
+		wordSpace(0);
+		sendLongBeep(HALF_MINUTE - 4 * TICKS_INTER_WORD - timeSpent);
+		wordSpace(0);
 		
 	   // retransmit the fox id.
 		sendFoxID(thisFoxNo);
@@ -101,18 +102,24 @@ int main(void)
 }
 
 /**
-	@brief Send the complete ID for this fox.
+	@brief Transmit the complete ID for this fox, including callsign.
 	@param fox_id The ID of the fox
 	@return The number of morse tics spent transmitting the fox ID
 
 	It consists of its callsign followed by
-	its number.
+	its number. Relevant spacing is automatically added.
+   The number of tics spent doing this is returned afterwards.
+
+   Specification of fox ids used in OZ-land (DK) can be found at
+   The EDR foxhunt page:
+   
+   http://qsl.net/oz7fox/Reglement.htm
 */
-int sendFoxID(uint8_t fox_id) 
+ticks_t sendFoxID(uint8_t fox_number) 
 {
-	int totalLength;
+	ticks_t totalLength;
 	totalLength = sendCallsign();
-	switch(fox_id)
+	switch(fox_number)
 	{
 		case 0:
 			return totalLength + sendChar(alpha);	//A
@@ -121,31 +128,40 @@ int sendFoxID(uint8_t fox_id)
 		case 2:
 			return totalLength + sendChar(victor);	//V
 		case 3:
-			return totalLength + sendChar(four);	//4
+			return totalLength + sendChar(hotel);	//H
 		case 4:
 			return totalLength + sendChar(five);	//5
+      case 5:
+         return totalLength + sendChar(november); //N
+      case 6:
+         return totalLength + sendChar(delta); //D
+      case 7:
+         return totalLength + sendChar(bravo); //B
 		default:
+         /* We don't know how to name a fox that is
+            beyond number 8 (7 if we start from zero),
+            so we don't. We just broadcast the
+            callsign and exit. */
 			return totalLength;
 	}
 }
 
 /**
-	@brief Broadcast "OZ7FOX"
-	@return The number of morse tics spent transmitting "OZ7FOX"
+	@brief Transmit "OZ7FOX" as morse code
+	@return The number of morse tics spent transmitting
 	
-	OZ7FOX is the call for all
-	foxes in OZ-land (DK).
+	OZ7FOX is the call for all	foxes in OZ-land (DK).
 */
-int sendCallsign() 
+ticks_t sendCallsign() 
 {
-	   int count = 0;
-		count += sendChar(oscar);
-		count += sendChar(zulu);
-		count += sendChar(seven);
-		count += sendChar(foxtrot);
-		count += sendChar(oscar);
-		count += sendChar(xray);
-	   return count;
+   ticks_t count = 0;
+	count += sendChar(oscar);
+	count += sendChar(zulu);
+	count += sendChar(seven);
+	count += sendChar(foxtrot);
+	count += sendChar(oscar);
+	count += sendChar(xray);
+   return count;
 }
 
 /**

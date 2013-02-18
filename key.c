@@ -56,19 +56,24 @@ const morse_char_t zulu =     {DAH(0)|DAH(1)|DIT(2)|DIT(3), 4};
  * This function iterates through the morse_char_t struct, sending
  * out the dits and dahs.
  */
-int sendChar(morse_char_t character)
+ticks_t sendChar(morse_char_t character)
 {
-	int i, counter, totalCount = 0;
-	for (i = 0; i < character.length; ++i)
+	int index;
+   ticks_t morse_ticks, total_morse_ticks = 0;
+	for (index = 0; index < character.length; ++index)
 	{
-		MORSEPORT &= !MORSEPIN;
-		counter = (EXTRACT_MORSE_BIT(i,character.pattern) ? 3 : 1 );
-		delay(counter);
-		totalCount += counter +1;
-		MORSEPORT |= MORSEPIN;
-		delay(1);
+		MORSE_ON; // start keying
+		morse_ticks = (EXTRACT_MORSE_BIT(
+         character.pattern, index) ? TICKS_DAH : TICKS_DIT );
+		delay(morse_ticks);
+		MORSE_OFF; // stop keying
+      // Intra-character spacing is one tick.
+      morse_ticks += delay(TICKS_INTRA_CHAR);
+		total_morse_ticks += morse_ticks; 
 	}
-	return totalCount;
+   // Make a space trailing this character
+   total_morse_ticks += charSpace(TICKS_INTRA_CHAR);
+   return total_morse_ticks;
 }
 
 
@@ -80,28 +85,27 @@ int sendChar(morse_char_t character)
  * The length of the beep must be so that the \e complete transmission is less
  * than one minute.
  */
-void sendLongBeep(unsigned int morse_ticks)
+ticks_t sendLongBeep(ticks_t morse_ticks)
 {
-	MORSEPORT &= !MORSEPIN;
+   MORSE_ON;
 	// Send about half a minute = 860 ticks
 	// minus the time used for sending out callsign
-	delay(morse_ticks); // OZ7FOX 4 is max length  =91
+	return delay(morse_ticks); // OZ7FOX 4 is max length  =91
 }
 
 /**
  * @brief	Makes a space between characters
  * @returns	Returns the number of morse ticks consumed
+ * @param afterChar Whether this space is trailing a sent character.
  *
- * This function holds a pause of two morse ticks.
- * Actually the standard is to hold for three morseticks between characters
+ * This function holds a pause of two or three morse ticks.
+ * The standard is to hold for three morseticks between characters
  * but since all morse dits and dahs is followed by a single tick of silence
- * only two ticks are nessecary
+ * only two ticks are nessecary. 
  */
-int charSpace(void)
+ticks_t charSpace(ticks_t alreadySpent)
 {
-	MORSEPORT |= MORSEPIN;
-	delay(2); // should wait 3, we already waited 1
-	return 2;
+   return space(TICKS_INTER_CHAR, alreadySpent);
 }
 
 /**
@@ -113,10 +117,28 @@ int charSpace(void)
  * since all morse dits and dahs in this implementation is followed by a single
  * tick of silence, only six ticks are nessecary.
  */
-int space(void)
+ticks_t wordSpace(ticks_t alreadySpent)
 {
-	MORSEPORT |= MORSEPIN;
-	delay(6); // same as above, but with 7
-	return 6;
+   return space(TICKS_INTER_WORD, alreadySpent);
 }
 
+/**
+   @brief   Makes a space of an arbitrary number of ticks
+   @param targetWidth  Duration of space in ticks
+   @param alreadySpent Ticks we have already waited.
+   @return  The number of ticks used
+
+   This function holds a pause of an arbitrary number of ticks
+   as defined by the argument width.
+*/
+ticks_t space(ticks_t targetWidth, ticks_t alreadySpent)
+{
+   // Turn keying off.
+   MORSE_OFF;
+   // If the time 
+   return (
+      alreadySpent < targetWidth
+      ? delay(targetWidth - alreadySpent)
+      : 0
+   );
+}

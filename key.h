@@ -18,27 +18,57 @@
 	using the logical OR (|) to form strings
 	of morse characters.
 */
-#define DAH(n) (1 << (7-n))
+#define DAH(index) (1 << (7 - index))
 /// Same as dah, only with dits
-#define DIT(n) (0 << (7-n))
+#define DIT(index) (0 << (7 - index))
+
+/**
+   @brief   Macros that define dit, dah and spaces width
+
+   We define the widths of dits and dahs, and we
+   define the withs of spacing between individual
+   dits and dahs, between characters and between
+   words. These are standardized.
+*/
+/// The width of a dit in ticks
+#define TICKS_DIT 1
+/// The width of a dah in ticks
+#define TICKS_DAH 3
+/// The space between dits and dahs inside a character
+#define TICKS_INTRA_CHAR 1
+/// The space between characters
+#define TICKS_INTER_CHAR 3
+/// The space inside a word is the same as the space between characters
+#define TICKS_INTRA_WORD TICKS_INTER_CHAR
+/// The space between words
+#define TICKS_INTER_WORD 7
 
 /**
  * @brief	A macro to determine wether a bit is true or false
- * @param	n The nth bit to test
- * @param	b The bitpattern to extract the bit from
+ * @param	p The morse_pattern_t to extract the bit from
+ * @param	i The index of bit to extract (from left, starting with 0)
  * @return	Returns 1 if the bit was set and 0 otherwise
  *
  * This macro extracts a bitvalue from a bit pattern
  */
-#define EXTRACT_MORSE_BIT(n,b) ((b >> (7-n)) & 1)
+#define EXTRACT_MORSE_BIT(p,i) ((p >> (7-i)) & 1)
 
+/// Macro to turn morse key ON
+#define MORSE_ON MORSEPORT &= !MORSEPIN
+/// Macro to turn morse key OFF
+#define MORSE_OFF MORSEPORT |= MORSEPIN
+
+/// The length of a morse character in terms of dits and dahs
 typedef uint8_t morse_length_t;
+/// A pattern of dits and dahs (0 and 1)
 typedef uint8_t morse_pattern_t;
 
+/// A number of ticks is represented as an unsigned integer
+typedef unsigned int ticks_t;
+
 /**
+ * @struct morse_char
  * @brief	A struct that contains a complete morse charater
- * @var		pattern The dits and dahs of a morse character
- * @var 	length How many dits and dahs there are in the chararcter
  *
  * This struct is at the heart of the code.
  * It gives the pattern to send out, a binary 0 being a dit and a binary 1
@@ -48,9 +78,11 @@ typedef uint8_t morse_pattern_t;
  * All the actual characters are described in their expanded form in the
  * implementation.
  */
-typedef struct 
+typedef struct morse_char
 {
-	morse_pattern_t pattern;
+   /// @var		pattern The dits and dahs of a morse character
+   morse_pattern_t pattern;
+   /// @var 	length How many dits and dahs there are in the chararcter
 	morse_length_t length;
 } morse_char_t;
 
@@ -91,9 +123,10 @@ extern const morse_char_t xray;
 extern const morse_char_t yankee;
 extern const morse_char_t zulu;
 
-int sendChar(morse_char_t character);
-void sendLongBeep(unsigned int morse_ticks);
-int charSpace(void);
-int space(void);
+ticks_t sendChar(morse_char_t character);
+ticks_t sendLongBeep(ticks_t morse_ticks);
+ticks_t charSpace(ticks_t alreadySpent);
+ticks_t wordSpace(ticks_t alreadySpent);
+ticks_t space(ticks_t targetWidth, ticks_t alreadySpent);
 
 #endif //KEY_H

@@ -60,7 +60,7 @@ void resetTimer( void )
  * defined in the press parameter.
  * The chip will be in idle mode while waiting for the timeout
  */
-void delay(int press)
+ticks_t delay(ticks_t press)
 {
 	int i;
 	for (i = 0; i< press; ++i)
@@ -75,6 +75,7 @@ void delay(int press)
 		sleep_cpu();
 		sleep_disable();
 	}
+   return press;
 }
 
 /**
@@ -124,9 +125,9 @@ void synchronizeTick( void )
 void enaFastTimer( void )
 {
 	// make sure an interrupt is not going to happen
-	TIFR |= 1<< OCF1A;
+	TIFR |= 1 << OCF1A;
 	// enable the next timer interrupt
-	TIMSK |= 1<<OCIE1A;
+	TIMSK |= 1 << OCIE1A;
 }
 
 /**
@@ -137,7 +138,7 @@ void enaFastTimer( void )
  */
 void disFastTimer(void )
 {
-	TIMSK &= !(1<<OCIE1A);
+	TIMSK &= !(1 << OCIE1A);
 }
 
 /**
@@ -148,9 +149,9 @@ void disFastTimer(void )
 void enaSlowTimer( void )
 {
 	// Make sure an interrupt is not going to happen
-	TIFR |= 1<<OCF2;
+	TIFR |= 1 << OCF2;
 	// Enable the next timer interrupt
-	TIMSK |= 1<<OCIE2;
+	TIMSK |= 1 << OCIE2;
 	// synchronize with the next one minute tick
 	// TODO Actually synchronize
 }
@@ -163,7 +164,7 @@ void enaSlowTimer( void )
  */
 void disSlowTimer( void )
 {
-	TIMSK &= !(1<<OCIE2);
+	TIMSK &= !(1 << OCIE2);
 }
 
 /**

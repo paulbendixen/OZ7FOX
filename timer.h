@@ -17,6 +17,6 @@ void enaFastTimer( void );
 void enaSlowTimer( void );
 void disFastTimer( void );
 void disSlowTimer( void );
-void delay(int press);
+int delay(int press);
 
 #endif //TIMER_H
