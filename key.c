@@ -6,6 +6,7 @@
  */
 
 #include "key.h"
+#include "timer.h"
 
 /* Initialization of constants corresponding to the characters
 	that are supported. They are declared as extern in key.h

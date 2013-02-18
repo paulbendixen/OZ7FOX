@@ -8,7 +8,6 @@
 #ifndef KEY_H
 #define KEY_H
 #include "globals.h"
-#include "timer.h"
 
 /**
  * @brief	Macros to generate a bit pattern

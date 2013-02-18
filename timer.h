@@ -5,6 +5,7 @@
 #ifndef TIMER_H
 #define TIMER_H
 #include "globals.h"
+#include "key.h"
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 
@@ -17,6 +18,6 @@ void enaFastTimer( void );
 void enaSlowTimer( void );
 void disFastTimer( void );
 void disSlowTimer( void );
-int delay(int press);
+ticks_t delay(ticks_t press);
 
 #endif //TIMER_H
