@@ -12,23 +12,23 @@
 /**
  * @brief	Macros to generate a bit pattern
  *
-	Macros to generate bit pattern conrresponsing to a dit (dot) or 
-	dah (dash) at a given position. These can be composited
-	using the logical OR (|) to form strings
-	of morse characters.
-*/
+ Macros to generate bit pattern conrresponsing to a dit (dot) or 
+ dah (dash) at a given position. These can be composited
+ using the logical OR (|) to form strings
+ of morse characters.
+ */
 #define DAH(index) (1 << (7 - index))
 /// Same as dah, only with dits
 #define DIT(index) (0 << (7 - index))
 
 /**
-   @brief   Macros that define dit, dah and spaces width
+  @brief   Macros that define dit, dah and spaces width
 
-   We define the widths of dits and dahs, and we
-   define the withs of spacing between individual
-   dits and dahs, between characters and between
-   words. These are standardized.
-*/
+  We define the widths of dits and dahs, and we
+  define the withs of spacing between individual
+  dits and dahs, between characters and between
+  words. These are standardized.
+ */
 /// The width of a dit in ticks
 #define TICKS_DIT 1
 /// The width of a dah in ticks
@@ -79,9 +79,9 @@ typedef unsigned int ticks_t;
  */
 typedef struct morse_char
 {
-   /// @var		pattern The dits and dahs of a morse character
-   morse_pattern_t pattern;
-   /// @var 	length How many dits and dahs there are in the chararcter
+	/// @var		pattern The dits and dahs of a morse character
+	morse_pattern_t pattern;
+	/// @var 	length How many dits and dahs there are in the chararcter
 	morse_length_t length;
 } morse_char_t;
 

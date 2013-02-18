@@ -75,7 +75,7 @@ ticks_t delay(ticks_t press)
 		sleep_cpu();
 		sleep_disable();
 	}
-   return press;
+	return press;
 }
 
 /**
@@ -188,7 +188,7 @@ ISR(TIMER1_COMPA_vect)
  */
 ISR(TIMER2_COMP_vect)
 {
-   // deepSleep() has taken over this functionality.
+	// deepSleep() has taken over this functionality.
 
 	//if (++minuteCounter == 10)
 	//	minuteCounter = 0;

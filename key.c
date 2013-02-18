@@ -60,21 +60,21 @@ const morse_char_t zulu =     {DAH(0)|DAH(1)|DIT(2)|DIT(3), 4};
 ticks_t sendChar(morse_char_t character)
 {
 	int index;
-   ticks_t morse_ticks, total_morse_ticks = 0;
+	ticks_t morse_ticks, total_morse_ticks = 0;
 	for (index = 0; index < character.length; ++index)
 	{
 		MORSE_ON; // start keying
 		morse_ticks = (EXTRACT_MORSE_BIT(
-         character.pattern, index) ? TICKS_DAH : TICKS_DIT );
+					character.pattern, index) ? TICKS_DAH : TICKS_DIT );
 		delay(morse_ticks);
 		MORSE_OFF; // stop keying
-      // Intra-character spacing is one tick.
-      morse_ticks += delay(TICKS_INTRA_CHAR);
+		// Intra-character spacing is one tick.
+		morse_ticks += delay(TICKS_INTRA_CHAR);
 		total_morse_ticks += morse_ticks; 
 	}
-   // Make a space trailing this character
-   total_morse_ticks += charSpace(TICKS_INTRA_CHAR);
-   return total_morse_ticks;
+	// Make a space trailing this character
+	total_morse_ticks += charSpace(TICKS_INTRA_CHAR);
+	return total_morse_ticks;
 }
 
 
@@ -88,7 +88,7 @@ ticks_t sendChar(morse_char_t character)
  */
 ticks_t sendLongBeep(ticks_t morse_ticks)
 {
-   MORSE_ON;
+	MORSE_ON;
 	// Send about half a minute = 860 ticks
 	// minus the time used for sending out callsign
 	return delay(morse_ticks); // OZ7FOX 4 is max length  =91
@@ -106,7 +106,7 @@ ticks_t sendLongBeep(ticks_t morse_ticks)
  */
 ticks_t charSpace(ticks_t alreadySpent)
 {
-   return space(TICKS_INTER_CHAR, alreadySpent);
+	return space(TICKS_INTER_CHAR, alreadySpent);
 }
 
 /**
@@ -120,26 +120,26 @@ ticks_t charSpace(ticks_t alreadySpent)
  */
 ticks_t wordSpace(ticks_t alreadySpent)
 {
-   return space(TICKS_INTER_WORD, alreadySpent);
+	return space(TICKS_INTER_WORD, alreadySpent);
 }
 
 /**
-   @brief   Makes a space of an arbitrary number of ticks
-   @param targetWidth  Duration of space in ticks
-   @param alreadySpent Ticks we have already waited.
-   @return  The number of ticks used
+  @brief   Makes a space of an arbitrary number of ticks
+  @param targetWidth  Duration of space in ticks
+  @param alreadySpent Ticks we have already waited.
+  @return  The number of ticks used
 
-   This function holds a pause of an arbitrary number of ticks
-   as defined by the argument width.
-*/
+  This function holds a pause of an arbitrary number of ticks
+  as defined by the argument width.
+ */
 ticks_t space(ticks_t targetWidth, ticks_t alreadySpent)
 {
-   // Turn keying off.
-   MORSE_OFF;
-   // If the time 
-   return (
-      alreadySpent < targetWidth
-      ? delay(targetWidth - alreadySpent)
-      : 0
-   );
+	// Turn keying off.
+	MORSE_OFF;
+	// If the time 
+	return (
+			alreadySpent < targetWidth
+			? delay(targetWidth - alreadySpent)
+			: 0
+	);
 }

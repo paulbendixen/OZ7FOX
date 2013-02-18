@@ -1,10 +1,10 @@
 /**
-	@file main.c
-	@brief Main function.
-	@return status code (never returns)
-	
-	The main function does all the fun stuff.
-*/
+  @file main.c
+  @brief Main function.
+  @return status code (never returns)
+
+  The main function does all the fun stuff.
+ */
 
 #include <avr/io.h>
 #include <avr/sleep.h>
@@ -29,20 +29,20 @@ int main(void)
 	initPorts();
 
 	/*
-	TODO: Make these parameters be selectable from dip switches
-	      or a similar device instead of being statically defined.
-	thisFoxNo = SELECTOR & 0x0F;
-	totalFoxNo = (SELECTOR & 0xF0)>>4;
-	*/
+TODO: Make these parameters be selectable from dip switches
+or a similar device instead of being statically defined.
+thisFoxNo = SELECTOR & 0x0F;
+totalFoxNo = (SELECTOR & 0xF0)>>4;
+	 */
 	thisFoxNo = 0;
 	totalFoxNo = 4;
-	
+
 	// counter/timer register setup
 	timerInit(MORSE_COUNTER_COMPARE_VALUE,SLOW_TIMER_COUNT);
 
 	// Enable interrupts.
 	sei();
-	
+
 	/* Main loop */
 	while (1)
 	{
@@ -58,7 +58,7 @@ int main(void)
 		 */
 
 		enaSlowTimer();
-	   /* Count through the foxes, wait for it to be our turn. */
+		/* Count through the foxes, wait for it to be our turn. */
 		for (currentFox = 0; currentFox < thisFoxNo; currentFox++)
 		{
 			//sleep for a minute
@@ -67,27 +67,27 @@ int main(void)
 			MORSEPORT ^= 0x20;
 #endif
 		}
-	   // Disable the slow timer (for sleeping) and enable the fast timer (for keying)
+		// Disable the slow timer (for sleeping) and enable the fast timer (for keying)
 		disSlowTimer();
 		enaFastTimer();
 
-	   // Send this fox' ID (including callsign) and record the time spend doing this.
+		// Send this fox' ID (including callsign) and record the time spend doing this.
 		timeSpent = sendFoxID(thisFoxNo);
-      wordSpace(TICKS_INTRA_WORD);
-	   
-	   // Send two consecutitve long beeps followed by short spaces.
+		wordSpace(TICKS_INTRA_WORD);
+
+		// Send two consecutitve long beeps followed by short spaces.
 		sendLongBeep(HALF_MINUTE - 4 * TICKS_INTER_WORD - timeSpent);
 		wordSpace(0);
 		sendLongBeep(HALF_MINUTE - 4 * TICKS_INTER_WORD - timeSpent);
 		wordSpace(0);
-		
-	   // retransmit the fox id.
+
+		// retransmit the fox id.
 		sendFoxID(thisFoxNo);
 
-	   // Disable the fast timer (for keying) and enable the slow timer (for sleeping) 		
-	   disFastTimer();
+		// Disable the fast timer (for keying) and enable the slow timer (for sleeping) 		
+		disFastTimer();
 		enaSlowTimer();
-		
+
 		currentFox++; // count ourselves
 		synchronizeTick();
 		for (; currentFox < totalFoxNo; currentFox++)
@@ -103,18 +103,18 @@ int main(void)
 
 /**
 	@brief Transmit the complete ID for this fox, including callsign.
-	@param fox_id The ID of the fox
-	@return The number of morse tics spent transmitting the fox ID
+	@param fox_id	The ID of the fox
+	@return	The number of morse tics spent transmitting the fox ID
 
 	It consists of its callsign followed by
 	its number. Relevant spacing is automatically added.
-   The number of tics spent doing this is returned afterwards.
+	The number of tics spent doing this is returned afterwards.
 
-   Specification of fox ids used in OZ-land (DK) can be found at
-   The EDR foxhunt page:
-   
-   http://qsl.net/oz7fox/Reglement.htm
-*/
+	Specification of fox ids used in OZ-land (DK) can be found at
+	The EDR foxhunt page:
+
+	http://qsl.net/oz7fox/Reglement.htm
+ */
 ticks_t sendFoxID(uint8_t fox_number) 
 {
 	ticks_t totalLength;
@@ -131,42 +131,42 @@ ticks_t sendFoxID(uint8_t fox_number)
 			return totalLength + sendChar(hotel);	//H
 		case 4:
 			return totalLength + sendChar(five);	//5
-      case 5:
-         return totalLength + sendChar(november); //N
-      case 6:
-         return totalLength + sendChar(delta); //D
-      case 7:
-         return totalLength + sendChar(bravo); //B
+		case 5:
+			return totalLength + sendChar(november); //N
+		case 6:
+			return totalLength + sendChar(delta); //D
+		case 7:
+			return totalLength + sendChar(bravo); //B
 		default:
-         /* We don't know how to name a fox that is
-            beyond number 8 (7 if we start from zero),
-            so we don't. We just broadcast the
-            callsign and exit. */
+			/* We don't know how to name a fox that is
+				beyond number 8 (7 if we start from zero),
+				so we don't. We just broadcast the
+				callsign and exit. */
 			return totalLength;
 	}
 }
 
 /**
-	@brief Transmit "OZ7FOX" as morse code
-	@return The number of morse tics spent transmitting
-	
-	OZ7FOX is the call for all	foxes in OZ-land (DK).
-*/
+  @brief Transmit "OZ7FOX" as morse code
+  @return The number of morse tics spent transmitting
+
+  OZ7FOX is the call for all	foxes in OZ-land (DK).
+ */
 ticks_t sendCallsign() 
 {
-   ticks_t count = 0;
+	ticks_t count = 0;
 	count += sendChar(oscar);
 	count += sendChar(zulu);
 	count += sendChar(seven);
 	count += sendChar(foxtrot);
 	count += sendChar(oscar);
 	count += sendChar(xray);
-   return count;
+	return count;
 }
 
 /**
-	@brief Initialize the ports on the microprocessor as either input or output ports.
-*/
+  @brief Initialize the ports on the microprocessor as either input or output ports.
+ */
 void initPorts() 
 {
 	// All selector ports are in input mode
