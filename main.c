@@ -1,9 +1,9 @@
 /**
-  @file main.c
-  @brief Main function.
-  @return status code (never returns)
-
-  The main function does all the fun stuff.
+ * @file main.c
+ * @brief Main function.
+ * @return status code (never returns)
+ *
+ * The main function does all the fun stuff.
  */
 
 #include <avr/io.h>
@@ -29,10 +29,10 @@ int main(void)
 	initPorts();
 
 	/*
-TODO: Make these parameters be selectable from dip switches
-or a similar device instead of being statically defined.
-thisFoxNo = SELECTOR & 0x0F;
-totalFoxNo = (SELECTOR & 0xF0)>>4;
+	 * TODO: Make these parameters be selectable from dip switches
+	 * or a similar device instead of being statically defined.
+	 * thisFoxNo = SELECTOR & 0x0F;
+	 * totalFoxNo = (SELECTOR & 0xF0)>>4;
 	 */
 	thisFoxNo = 0;
 	totalFoxNo = 4;
@@ -95,62 +95,72 @@ totalFoxNo = (SELECTOR & 0xF0)>>4;
 #ifndef NDEBUG
 			MORSEPORT ^=(0x10<<currentFox);;
 #endif
-			deepSleep();
 			// do the sleep thing again
+			deepSleep();
 		}
 	}
 }
 
 /**
-	@brief Transmit the complete ID for this fox, including callsign.
-	@param fox_id	The ID of the fox
-	@return	The number of morse tics spent transmitting the fox ID
-
-	It consists of its callsign followed by
-	its number. Relevant spacing is automatically added.
-	The number of tics spent doing this is returned afterwards.
-
-	Specification of fox ids used in OZ-land (DK) can be found at
-	The EDR foxhunt page:
-
-	http://qsl.net/oz7fox/Reglement.htm
+ * @brief Transmit the complete ID for this fox, including callsign.
+ * @param fox_id	The ID of the fox
+ * @return	The number of morse tics spent transmitting the fox ID
+ *
+ * It consists of its callsign followed by
+ * its number. Relevant spacing is automatically added.
+ * The number of tics spent doing this is returned afterwards.
+ * 
+ * Specification of fox ids used in OZ-land (DK) can be found at
+ * The EDR foxhunt page:
+ * 
+ * http://qsl.net/oz7fox/Reglement.htm
  */
 ticks_t sendFoxID(uint8_t fox_number) 
 {
 	ticks_t totalLength;
+	morse_char_t charToSend;
 	totalLength = sendCallsign();
+#ifdef INTERNATIONAL_FOX_ID
+	// All international identifiers are prefixed with 'MO'.
+	totalLength += sendChar(mike);
+	totalLength += sendChar(oscar);
 	switch(fox_number)
 	{
-		case 0:
-			return totalLength + sendChar(alpha);	//A
-		case 1:
-			return totalLength + sendChar(uniform);	//U
-		case 2:
-			return totalLength + sendChar(victor);	//V
-		case 3:
-			return totalLength + sendChar(hotel);	//H
-		case 4:
-			return totalLength + sendChar(five);	//5
-		case 5:
-			return totalLength + sendChar(november); //N
-		case 6:
-			return totalLength + sendChar(delta); //D
-		case 7:
-			return totalLength + sendChar(bravo); //B
+		case 0:	charToSend = echo; break;
+		case 1:	charToSend = india; break;
+		case 2:	charToSend = sierra; break;
+		case 3:	charToSend = hotel; break;
+		case 4:	charToSend = five; break;
+#else /* INTERNATIONAL_FOX_ID */
+/* If international ID is not used, assume OZ identifiers */
+	switch(fox_number)
+	{
+		case 0:	charToSend = alpha; break;
+		case 1:	charToSend = uniform; break;
+		case 2:	charToSend = victor; break;
+		/* EDR says H, the logical choise based on pattern is 4
+		 * TODO: What makes more sense? */
+		case 3:	charToSend = hotel; break; 
+		case 4:	charToSend = five; break;
+		case 5:	charToSend = november; break;
+		case 6:	charToSend = delta; break;
+		case 7:	charToSend = bravo; break;
+#endif /* INTERNATIONAL_FOX_ID */
 		default:
-			/* We don't know how to name a fox that is
-				beyond number 8 (7 if we start from zero),
-				so we don't. We just broadcast the
-				callsign and exit. */
+			/* We don't know how to name a fox that does
+			 * not fit with our predefined patterns,
+			 * so we don't. We just broadcast the
+			 * callsign and exit. */
 			return totalLength;
 	}
+	return totalLength + sendChar(charToSend);
 }
 
 /**
-  @brief Transmit "OZ7FOX" as morse code
-  @return The number of morse tics spent transmitting
-
-  OZ7FOX is the call for all	foxes in OZ-land (DK).
+ * @brief Transmit "OZ7FOX" as morse code
+ * @return The number of morse tics spent transmitting
+ * 
+ * OZ7FOX is the call for all foxes in OZ-land (DK).
  */
 ticks_t sendCallsign() 
 {
@@ -165,7 +175,7 @@ ticks_t sendCallsign()
 }
 
 /**
-  @brief Initialize the ports on the microprocessor as either input or output ports.
+ * @brief Initialize the ports on the microprocessor as either input or output ports.
  */
 void initPorts() 
 {
