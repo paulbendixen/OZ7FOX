@@ -35,7 +35,7 @@ int main(void)
 	 * totalFoxNo = (SELECTOR & 0xF0)>>4;
 	 */
 	thisFoxNo = 0;
-	totalFoxNo = 4;
+	totalFoxNo = 5;
 
 	// counter/timer register setup
 	timerInit(MORSE_COUNTER_COMPARE_VALUE,SLOW_TIMER_COUNT);
@@ -140,7 +140,8 @@ ticks_t sendFoxID(uint8_t fox_number)
 		case 2:	charToSend = victor; break;
 		/* EDR says H, the logical choise based on pattern is 4
 		 * TODO: What makes more sense? */
-		case 3:	charToSend = hotel; break; 
+		//case 3:	charToSend = hotel; break; 
+		case 3:	charToSend = four; break; 
 		case 4:	charToSend = five; break;
 		case 5:	charToSend = november; break;
 		case 6:	charToSend = delta; break;
