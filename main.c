@@ -120,6 +120,7 @@ ticks_t sendFoxID(uint8_t fox_number)
 	ticks_t totalLength;
 	morse_char_t charToSend;
 	totalLength = sendCallsign();
+	totalLength += wordSpace(TICKS_INTRA_WORD);
 #ifdef INTERNATIONAL_FOX_ID
 	// All international identifiers are prefixed with 'MO'.
 	totalLength += sendChar(mike);
