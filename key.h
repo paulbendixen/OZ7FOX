@@ -53,9 +53,9 @@
 #define EXTRACT_MORSE_BIT(p,i) ((p >> (7-i)) & 1)
 
 /// Macro to turn morse key ON
-#define MORSE_ON MORSEPORT &= !MORSEPIN
+#define MORSE_ON (MORSEPORT |= MORSEPIN)
 /// Macro to turn morse key OFF
-#define MORSE_OFF MORSEPORT |= MORSEPIN
+#define MORSE_OFF (MORSEPORT &= !MORSEPIN)
 
 /// The length of a morse character in terms of dits and dahs
 typedef uint8_t morse_length_t;
@@ -79,9 +79,9 @@ typedef unsigned int ticks_t;
  */
 typedef struct morse_char
 {
-	/// @var		pattern The dits and dahs of a morse character
+	/// The dits and dahs of a morse character
 	morse_pattern_t pattern;
-	/// @var 	length How many dits and dahs there are in the chararcter
+	/// How many dits and dahs there are in the chararcter
 	morse_length_t length;
 } morse_char_t;
 
@@ -122,10 +122,13 @@ extern const morse_char_t xray;
 extern const morse_char_t yankee;
 extern const morse_char_t zulu;
 
+extern const morse_char_t *allChars[36];
 ticks_t sendChar(morse_char_t character);
 ticks_t sendLongBeep(ticks_t morse_ticks);
 ticks_t charSpace(ticks_t alreadySpent);
 ticks_t wordSpace(ticks_t alreadySpent);
 ticks_t space(ticks_t targetWidth, ticks_t alreadySpent);
+ticks_t sendString(char *message);
+ticks_t sendStringN(char *message, int chars);
 
 #endif //KEY_H

@@ -50,6 +50,44 @@ const morse_char_t xray =     {DAH(0)|DIT(1)|DIT(2)|DAH(3), 4};
 const morse_char_t yankee =   {DAH(0)|DIT(1)|DAH(2)|DAH(3), 4};
 const morse_char_t zulu =     {DAH(0)|DAH(1)|DIT(2)|DIT(3), 4};
 
+const morse_char_t *allChars[] = { &zero,  
+&one,
+&two,
+&three,
+&four,
+&five,
+&six,
+&seven,
+&eight,
+&nine,
+&alpha,
+&bravo,
+&charlie,
+&delta,
+&echo,
+&foxtrot,
+&golf,
+&hotel,
+&india,
+&juliet,
+&kilo,
+&lima,
+&mike,
+&november,
+&oscar,
+&papa,
+&quebec,
+&romeo,
+&sierra,
+&tango,
+&uniform,
+&victor,
+&whisky,
+&xray,
+&yankee,
+&zulu};
+
+
 /**
  * @brief	THIS IS THE ONE THAT SENDS A MORSE CHARACTER :D
  * @param	chararcter The morse_char_t character to send
@@ -134,10 +172,12 @@ ticks_t wordSpace(ticks_t alreadySpent)
  * @brief	Makes a space of an arbitrary number of ticks
  * @param	targetWidth	Duration of space in ticks
  * @param	alreadySpent	Ticks we have already waited.
- * @return  The number of ticks used
+ * @return	The number of ticks used
  * 
  * This function holds a pause of an arbitrary number of ticks
  * as defined by the argument width.
+ * The alreadySpent variable should be 0 if there is nothing before this,
+ * the INTRA_WORD or INTRA_CHAR constants is usually good default choices.
  */
 ticks_t space(ticks_t targetWidth, ticks_t alreadySpent)
 {
@@ -150,4 +190,77 @@ ticks_t space(ticks_t targetWidth, ticks_t alreadySpent)
 			? delay(targetWidth - alreadySpent)
 			: 0
 	);
+}
+
+/**
+ * @brief	internal helper function to send ascii as morse structs
+ * @param	ch The ASCII char to transmit using morse
+ * @return	The number of ticks it took to send the char
+ */
+ticks_t sendUsingArray( const char ch )
+{
+	ticks_t tickCounter;
+	if( ( 0x41 <= ch ) && ( 0x5a >= ch ) ) /* Capitals */
+	{
+		/* 65 = alpha = 10 so subtract 55 */
+		tickCounter = sendChar( *allChars[ ch - 55 ] );
+	}
+	else if( ( 0x61 <= ch ) && ( 0x7a >= ch ) ) /* lowercase */
+	{
+		/* 97 = alpha = 10 so subtract 87 */
+		tickCounter = sendChar( *allChars[ ch - 87 ] );
+	}
+	else if( 0x20 == ch ) /* This is a space*/
+	{
+		tickCounter = wordSpace( TICKS_INTRA_WORD );
+	}
+	else if( ( 0x30 <= ch ) && ( 0x39 >= ch ) ) /* Numbers */
+	{
+		tickCounter = sendChar( *allChars[ ch - 0x30 ] );
+	}
+	else /* fail catcher */
+	{
+		/* This is where an error logger would go... */
+		tickCounter = 0;
+	}
+	return tickCounter;
+}
+
+/**
+ * @brief	Sends a null terminated string, using the array method
+ * @param	message A pointer to an array of chars that is null terminated.
+ * @return	The number of ticks used.
+ *
+ * This function takes a null terminated string and transmits it.
+ *
+ * @warning	This function may read beoynd the limits of the array if it is
+ * not properly terminated
+ */
+ticks_t sendString(char *message)
+{
+	ticks_t tickCounter=0;
+	while ( 0 != *message )
+	{
+		tickCounter += sendUsingArray( *message );
+		message++;
+	}
+	return tickCounter;
+}
+
+/**
+ * @brief	Sends a string of length chars using the array method
+ * @param	message a char pointer to the string to send
+ * @param	chars the length of the string to send
+ * @return	The total time for sending the entire string in ticks
+ */
+ticks_t sendStringN(char *message, const int chars)
+{
+	ticks_t tickCounter = 0;
+	int i;
+	for( i = 0; i < chars ; i++ )
+	{
+		tickCounter += sendUsingArray( *message );
+		message++;
+	}
+	return tickCounter;
 }

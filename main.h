@@ -8,7 +8,7 @@
  * 
  * For documentation of its functions, see the documentation of \c{main.c}
  */
-ticks_t sendFoxID(uint8_t fox_number);
+ticks_t sendFoxID(uint8_t foxNumber);
 ticks_t sendCallsign();
 void initPorts();
 

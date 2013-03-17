@@ -139,7 +139,7 @@ ticks_t sendFoxID(uint8_t fox_number)
 		case 0:	charToSend = alpha; break;
 		case 1:	charToSend = uniform; break;
 		case 2:	charToSend = victor; break;
-		/* EDR says H, the logical choise based on pattern is 4
+		/* EDR says H, the logical choice based on pattern is 4
 		 * TODO: What makes more sense? */
 		//case 3:	charToSend = hotel; break; 
 		case 3:	charToSend = four; break; 
@@ -169,7 +169,7 @@ ticks_t sendCallsign()
 	ticks_t count = 0;
 	count += sendChar(oscar);
 	count += sendChar(zulu);
-	count += sendChar(seven);
+	count += sendChar(*allChars[7]);
 	count += sendChar(foxtrot);
 	count += sendChar(oscar);
 	count += sendChar(xray);
