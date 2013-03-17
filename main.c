@@ -115,7 +115,7 @@ int main(void)
  * 
  * http://qsl.net/oz7fox/Reglement.htm
  */
-ticks_t sendFoxID(uint8_t fox_number) 
+ticks_t sendFoxID(uint8_t foxNumber) 
 {
 	ticks_t totalLength;
 	morse_char_t charToSend;
@@ -125,7 +125,7 @@ ticks_t sendFoxID(uint8_t fox_number)
 	// All international identifiers are prefixed with 'MO'.
 	totalLength += sendChar(mike);
 	totalLength += sendChar(oscar);
-	switch(fox_number)
+	switch(foxNumber)
 	{
 		case 0:	charToSend = echo; break;
 		case 1:	charToSend = india; break;
@@ -134,7 +134,7 @@ ticks_t sendFoxID(uint8_t fox_number)
 		case 4:	charToSend = five; break;
 #else /* INTERNATIONAL_FOX_ID */
 /* If international ID is not used, assume OZ identifiers */
-	switch(fox_number)
+	switch(foxNumber)
 	{
 		case 0:	charToSend = alpha; break;
 		case 1:	charToSend = uniform; break;
