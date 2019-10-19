@@ -34,9 +34,10 @@ int main(void)
 	 * thisFoxNo = SELECTOR & 0x0F;
 	 * totalFoxNo = (SELECTOR & 0xF0)>>4;
 	 */
-	thisFoxNo = 0;
+	thisFoxNo = SELECTOR & 0x0F;
 	totalFoxNo = 5;
-
+	
+	MORSEPORT = thisFoxNo << 4 | 0x0E;
 	// counter/timer register setup
 	timerInit(MORSE_COUNTER_COMPARE_VALUE,SLOW_TIMER_COUNT);
 
@@ -64,7 +65,7 @@ int main(void)
 			//sleep for a minute
 			deepSleep();
 #ifndef NDEBUG
-			MORSEPORT ^= 0x20;
+			MORSEPORT ^= 0x80;
 #endif
 		}
 		// Disable the slow timer (for sleeping) and enable the fast timer (for keying)
@@ -183,6 +184,7 @@ void initPorts()
 {
 	// All selector ports are in input mode
 	SELECTORSETUP = 0x00;
+	SELECTORPULLUP = 0x0F;
 	// All morse ports are output ports
 	MORSESETUP = 0xFF;
 #ifndef NDEBUG
