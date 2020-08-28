@@ -33,6 +33,7 @@ void timerInit(uint16_t fastTimerCompare, uint8_t slowTimerCompare)
 	TCNT2 = 0;
 	OCR2 = slowTimerCompare;
 	//TIMSK |= (1<<OCIE1A)|(1<<OCIE2);
+	while((ASSR & 0x07)!=0);
 }
 
 
@@ -86,12 +87,11 @@ ticks_t delay(ticks_t press)
  */
 void deepSleep( void )
 {
-	int i;
 	cli();
 	sleep_enable();
-	set_sleep_mode(SLEEP_MODE_EXT_STANDBY);
+	set_sleep_mode(SLEEP_MODE_PWR_SAVE);
 	sei();
-	for (i=0;i<10;i++)
+	for ( int i=0;i<10;i++)
 	{
 		sleep_cpu();
 	}

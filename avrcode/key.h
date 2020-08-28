@@ -53,9 +53,9 @@
 #define EXTRACT_MORSE_BIT(p,i) ((p >> (7-i)) & 1)
 
 /// Macro to turn morse key ON
-#define MORSE_ON (MORSEPORT |= MORSEPIN)
+#define MORSE_ON (MORSEPORT = MORSEPIN)
 /// Macro to turn morse key OFF
-#define MORSE_OFF (MORSEPORT &= !MORSEPIN)
+#define MORSE_OFF (MORSEPORT = ~MORSEPIN)
 
 /// The length of a morse character in terms of dits and dahs
 typedef uint8_t morse_length_t;
